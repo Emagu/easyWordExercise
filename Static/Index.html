@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>白癡語言練習器</title>
+        <script
+  src="https://code.jquery.com/jquery-2.2.4.js"
+  integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+  crossorigin="anonymous"></script>
+        <script>
+            function getAns(){
+                $.get('/translate?parm=' + $("#question").text + '&from=zh-tw&to=ja', function(data){
+                   $("#ans").text(data); 
+                });
+            }
+            $(function(){
+               $.get('/random',function(data){
+                   $("#question").text(data);
+               });
+            });
+        </script>
+    </head>
+    <body>
+        <label id="question"></label>
+        <label id="ans"></label>
+        <input type="text" id="edit" />
+        <button id="get" onclick="getAns()">答案</button>
+    </body>
+</html>

@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>白癡語言練習器</title>
+        <script
+  src="https://code.jquery.com/jquery-2.2.4.js"
+  integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+  crossorigin="anonymous"></script>
+        <script>
+            function getAns(){
+                $.get('/translate?parm=' + $("#question").text() + "&from=zh-tw&to=ja",(data)=>{
+                    $("#ans").text(data.ans);
+                    $("#get").hide();
+                    $("#push").show();
+                    $("#next").show();
+                });
+            }
+            function pushAns(){
+                $.ajax({
+                    url: '/translate',
+                    data: JSON.stringify({
+                        parm:$("#question").text(),
+                        from:"zh-tw",
+                        to:"ja",
+                        ans:$("#edit").text()
+                    }),
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    success: function(returnData){
+                        alert('修改成功!')
+                        question();
+                    }
+                });
+            }
+            function question(){
+                $("#ans").text('');
+                   $("#get").show();
+                   $("#push").hide();
+                   $("#next").hide();
+                $.get('/random',function(data){
+                   $("#question").text(data);
+               });
+            }
+            $(function(){
+               question();
+            });
+        </script>
+    </head>
+    <body>
+        <label id="question"></label>
+        <label id="ans"></label>
+        <input type="text" id="edit" />
+        <button id="get" onclick="getAns()">答案</button>
+        <button id="push" onclick="pushAns()">更改</button>
+        <button id="next" onclick="question()">下一題</button>
+    </body>
+</html>
